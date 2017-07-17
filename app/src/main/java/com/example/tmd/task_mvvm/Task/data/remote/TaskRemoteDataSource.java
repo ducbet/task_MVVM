@@ -1,7 +1,7 @@
 package com.example.tmd.task_mvvm.Task.data.remote;
 
 import android.content.Context;
-import com.example.tmd.task_mvvm.ViewModel.ObservableTask;
+import com.example.tmd.task_mvvm.ViewModel.Task;
 import com.example.tmd.task_mvvm.Task.data.TaskDataSource;
 
 /**
@@ -17,22 +17,22 @@ public class TaskRemoteDataSource implements TaskDataSource {
     }
 
     @Override
-    public void getAllTask(Callbacks<ObservableTask> callback) {
+    public void getAllTask(Callbacks<Task> callback) {
 
     }
 
     @Override
-    public void addTask(ObservableTask observableTask, Callback<Boolean> callback) {
+    public void addTask(Task task, Callback<Boolean> callback) {
 
     }
 
     @Override
-    public void editTask(ObservableTask observableTask, Callback<Boolean> callback) {
+    public void editTask(Task task, Callback<Boolean> callback) {
 
     }
 
     @Override
-    public void deleteTask(ObservableTask observableTask, Callback<Boolean> callback) {
+    public void deleteTask(Task task, Callback<Boolean> callback) {
 
     }
 }

@@ -1,7 +1,7 @@
 package com.example.tmd.task_mvvm.Task.data.local;
 
 import android.content.Context;
-import com.example.tmd.task_mvvm.ViewModel.ObservableTask;
+import com.example.tmd.task_mvvm.ViewModel.Task;
 import com.example.tmd.task_mvvm.Task.data.TaskDataSource;
 
 /**
@@ -10,22 +10,20 @@ import com.example.tmd.task_mvvm.Task.data.TaskDataSource;
 
 public class TaskLocalDataSource implements TaskDataSource {
 
-    private Context mContext;
     private _CRUDHelper mCRUDHelper;
 
     public TaskLocalDataSource(Context context) {
-        mContext = context;
         mCRUDHelper = new _CRUDHelper(context);
     }
 
     @Override
-    public void getAllTask(Callbacks<ObservableTask> callback) {
+    public void getAllTask(Callbacks<Task> callback) {
         callback.onSuccessfull(mCRUDHelper.getAllTask());
     }
 
     @Override
-    public void addTask(ObservableTask observableTask, TaskDataSource.Callback<Boolean> callback) {
-        if (mCRUDHelper.insertTask(observableTask)) {
+    public void addTask(Task task, TaskDataSource.Callback<Boolean> callback) {
+        if (mCRUDHelper.insertTask(task)) {
             callback.onSuccessfull(Boolean.TRUE);
         } else {
             callback.onFailed("ADD TASK FAILED");
@@ -33,8 +31,8 @@ public class TaskLocalDataSource implements TaskDataSource {
     }
 
     @Override
-    public void editTask(ObservableTask observableTask, Callback<Boolean> callback) {
-        if (mCRUDHelper.editTask(observableTask)) {
+    public void editTask(Task task, Callback<Boolean> callback) {
+        if (mCRUDHelper.editTask(task)) {
             callback.onSuccessfull(Boolean.TRUE);
         } else {
             callback.onFailed("EDIT TASK FAILED");
@@ -42,8 +40,8 @@ public class TaskLocalDataSource implements TaskDataSource {
     }
 
     @Override
-    public void deleteTask(ObservableTask observableTask, Callback<Boolean> callback) {
-        if (mCRUDHelper.deleteTask(observableTask)) {
+    public void deleteTask(Task task, Callback<Boolean> callback) {
+        if (mCRUDHelper.deleteTask(task)) {
             callback.onSuccessfull(Boolean.TRUE);
         } else {
             callback.onFailed("EDIT TASK FAILED");

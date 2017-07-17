@@ -6,7 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.example.tmd.task_mvvm.R;
-import com.example.tmd.task_mvvm.ViewModel.ObservableTask;
+import com.example.tmd.task_mvvm.Task.data.TaskDataSource;
+import com.example.tmd.task_mvvm.ViewModel.TaskViewModel;
 import com.example.tmd.task_mvvm.databinding.ItemTaskBinding;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,34 +18,30 @@ import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
-    private List<ObservableTask> mList = new ArrayList<>();
-    private MainContract.View mView;
+    private List<TaskViewModel> mList = new ArrayList<>();
 
-    public TaskAdapter() {
-    }
-
-    public void updateData(List<ObservableTask> list) {
+    public void updateData(List<TaskViewModel> list) {
         Log.d("MY_TAG", "notifyDataSetChanged: ");
         if (list == null) return;
         mList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public void updateData(ObservableTask observableTask) {
+    public void updateData(TaskViewModel taskViewModel) {
         Log.d("MY_TAG", "updateData: ");
         int index;
-        if (mList.contains(observableTask)) {
-            index = mList.indexOf(observableTask);
-            mList.set(index, observableTask);
+        if (mList.contains(taskViewModel)) {
+            index = mList.indexOf(taskViewModel);
+            mList.set(index, taskViewModel);
         } else {
-            mList.add(observableTask);
+            mList.add(taskViewModel);
             index = mList.size() - 1;
         }
         notifyItemChanged(index);
     }
 
-    public void deleteTask(ObservableTask observableTask) {
-        int index = mList.indexOf(observableTask);
+    public void deleteTask(TaskViewModel taskViewModel) {
+        int index = mList.indexOf(taskViewModel);
         if (index >= 0) {
             mList.remove(index);
         }
@@ -53,7 +50,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        mView = (MainContract.View) parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ItemTaskBinding itemTaskBinding =
                 DataBindingUtil.inflate(layoutInflater, R.layout.item_task, parent, false);
@@ -62,8 +58,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ObservableTask observableTask = mList.get(position);
-        holder.bindData(observableTask);
+        TaskViewModel taskViewModel = mList.get(position);
+        holder.bindData(taskViewModel);
     }
 
     @Override
@@ -81,8 +77,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             mItemTaskBinding = itemTaskBinding;
         }
 
-        public void bindData(ObservableTask observableTask) {
-            mItemTaskBinding.setViewModel(observableTask);
+        public void bindData(TaskViewModel taskViewModel) {
+            mItemTaskBinding.setViewModel(taskViewModel);
         }
     }
 }

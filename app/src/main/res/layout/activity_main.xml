@@ -6,8 +6,8 @@
     >
     <data>
         <variable
-            name="activity"
-            type="com.example.tmd.task_mvvm.ListTaskActivity.MainActivity"
+            name="viewModel"
+            type="com.example.tmd.task_mvvm.ViewModel.MainViewModel"
             />
         <import type="com.example.tmd.task_mvvm.Util.LayoutManagers"/>
     </data>
@@ -22,7 +22,7 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            bind:adapter="@{activity.adapter}"
+            bind:adapter="@{viewModel.adapter}"
             bind:layoutManager="@{LayoutManagers.linear()}"
             />
     </LinearLayout>

@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import com.example.tmd.task_mvvm.ViewModel.ObservableTask;
+import com.example.tmd.task_mvvm.ViewModel.Task;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +17,8 @@ public class _CRUDHelper extends DatabaseHelper {
         super(context);
     }
 
-    public List<ObservableTask> getAllTask() {
-        List<ObservableTask> mList = new ArrayList<>();
+    public List<Task> getAllTask() {
+        List<Task> mList = new ArrayList<>();
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor =
                 database.query(TaskContractDatabase.TaskDatabaseEntry.TABLE_NAME, new String[] {
@@ -34,7 +34,7 @@ public class _CRUDHelper extends DatabaseHelper {
                         cursor.getColumnIndex(TaskContractDatabase.TaskDatabaseEntry.COLUMN_TITLE));
                 boolean isFinished = cursor.getInt(cursor.getColumnIndex(
                         TaskContractDatabase.TaskDatabaseEntry.COLUMN_FINISHED)) != 0;
-                mList.add(new ObservableTask(id, isFinished, title));
+                mList.add(new Task(id, isFinished, title));
             }
         }
         cursor.close();
@@ -42,34 +42,34 @@ public class _CRUDHelper extends DatabaseHelper {
         return mList;
     }
 
-    public boolean insertTask(ObservableTask observableTask) {
+    public boolean insertTask(Task task) {
         SQLiteDatabase database = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TaskContractDatabase.TaskDatabaseEntry.COLUMN_TITLE, observableTask.getTitle().get());
-        values.put(TaskContractDatabase.TaskDatabaseEntry.COLUMN_FINISHED, observableTask.isFinished().get());
+        values.put(TaskContractDatabase.TaskDatabaseEntry.COLUMN_TITLE, task.getTitle().get());
+        values.put(TaskContractDatabase.TaskDatabaseEntry.COLUMN_FINISHED, task.isFinished().get());
         long result =
                 database.insert(TaskContractDatabase.TaskDatabaseEntry.TABLE_NAME, null, values);
         if (result >= 0) {
-            observableTask.setId((int) result);
+            task.setId((int) result);
         }
         database.close();
         return result >= 1;// id bat dau tu 1
     }
 
-    public boolean editTask(ObservableTask observableTask) {
+    public boolean editTask(Task task) {
         SQLiteDatabase database = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TaskContractDatabase.TaskDatabaseEntry.COLUMN_TITLE, observableTask.getTitle().get());
-        values.put(TaskContractDatabase.TaskDatabaseEntry.COLUMN_FINISHED, observableTask.isFinished().get());
+        values.put(TaskContractDatabase.TaskDatabaseEntry.COLUMN_TITLE, task.getTitle().get());
+        values.put(TaskContractDatabase.TaskDatabaseEntry.COLUMN_FINISHED, task.isFinished().get());
         int result = database.update(TaskContractDatabase.TaskDatabaseEntry.TABLE_NAME, values,
-                TaskContractDatabase.TaskDatabaseEntry._ID + " = " + observableTask.getId(), null);
+                TaskContractDatabase.TaskDatabaseEntry._ID + " = " + task.getId(), null);
         return result > 0; // result la so row bi thay doi
     }
 
-    public boolean deleteTask(ObservableTask observableTask) {
+    public boolean deleteTask(Task task) {
         SQLiteDatabase database = getWritableDatabase();
         int result = database.delete(TaskContractDatabase.TaskDatabaseEntry.TABLE_NAME,
-                TaskContractDatabase.TaskDatabaseEntry._ID + " = " + observableTask.getId(), null);
+                TaskContractDatabase.TaskDatabaseEntry._ID + " = " + task.getId(), null);
         return result > 0; // result la so row bi delete
     }
 }

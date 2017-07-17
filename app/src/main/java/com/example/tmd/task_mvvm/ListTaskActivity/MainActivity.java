@@ -9,34 +9,31 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.Toast;
 import com.example.tmd.task_mvvm.R;
-import com.example.tmd.task_mvvm.ViewModel.ObservableTask;
 import com.example.tmd.task_mvvm.Task.data.TaskRepository;
 import com.example.tmd.task_mvvm.Task.data.local.TaskLocalDataSource;
 import com.example.tmd.task_mvvm.Task.data.remote.TaskRemoteDataSource;
+import com.example.tmd.task_mvvm.ViewModel.MainViewModel;
+import com.example.tmd.task_mvvm.ViewModel.Task;
 import com.example.tmd.task_mvvm.databinding.ActivityMainBinding;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
-
-    private MainContract.Presenter mPresenter;
-    private TaskAdapter mAdapter = new TaskAdapter();
+public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MY_TAG";
+    private MainViewModel mMainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityMainBinding mainBinding =
                 DataBindingUtil.setContentView(this, R.layout.activity_main);
-        mainBinding.setActivity(this);
-        mPresenter = new TaskPresenter(this,
+        mMainViewModel = new MainViewModel(this,
                 new TaskRepository(new TaskLocalDataSource(this), new TaskRemoteDataSource(this)));
+        mainBinding.setViewModel(mMainViewModel);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.start();
     }
 
     @Override
@@ -56,12 +53,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void setPresenter(TaskPresenter presenter) {
-        mPresenter = presenter;
-    }
-
-    @Override
     public void onShowAddTaskInputDialog() {
         final EditText editText = new EditText(this);
         editText.setHint("Title");
@@ -70,9 +61,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .setPositiveButton("DONE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ObservableTask observableTask =
-                                new ObservableTask(editText.getText().toString());
-                        mPresenter.addTask(observableTask);
+                        mMainViewModel.addTask(new Task(editText.getText().toString()));
                     }
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -81,78 +70,5 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                     }
                 })
                 .show();
-    }
-
-    @Override
-    public void onShowEditTaskInputDialog(final ObservableTask observableTask) {
-        final EditText editText = new EditText(this);
-        editText.setHint("Title");
-        new AlertDialog.Builder(this).setTitle("New observableTask")
-                .setView(editText)
-                .setPositiveButton("DONE", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        observableTask.setTitle(editText.getText().toString());
-                        mPresenter.editTask(observableTask);
-                    }
-                })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .show();
-    }
-
-    @Override
-    public void onChangeCheckBox(ObservableTask observableTask) {
-        observableTask.setFinished(!observableTask.isFinished().get());
-        mPresenter.editTask(observableTask);
-    }
-
-    @Override
-    public void onShowDeleteTaskConfirmDialog(final ObservableTask observableTask) {
-        new AlertDialog.Builder(this).setTitle("New observableTask")
-                .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mPresenter.deleteTask(observableTask);
-                    }
-                })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .show();
-    }
-
-    @Override
-    public void onAddTaskSuccess(ObservableTask observableTask) {
-        mAdapter.updateData(observableTask);
-    }
-
-    @Override
-    public void onFailed(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onGetAllTaskSuccess(List<ObservableTask> listObservableTasks) {
-        mAdapter.updateData(listObservableTasks);
-    }
-
-    @Override
-    public void onEditTaskSuccess(ObservableTask observableTask) {
-        mAdapter.updateData(observableTask);
-    }
-
-    @Override
-    public void onDeleteTaskSuccess(ObservableTask observableTask) {
-        mAdapter.deleteTask(observableTask);
-    }
-
-    public TaskAdapter getAdapter() {
-        return mAdapter;
     }
 }
