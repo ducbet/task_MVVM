@@ -1,11 +1,10 @@
 package com.example.tmd.task_mvp.ListTaskActivity;
 
 import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,38 +15,28 @@ import com.example.tmd.task_mvp.Task.Model.Task;
 import com.example.tmd.task_mvp.Task.data.TaskRepository;
 import com.example.tmd.task_mvp.Task.data.local.TaskLocalDataSource;
 import com.example.tmd.task_mvp.Task.data.remote.TaskRemoteDataSource;
-import java.util.ArrayList;
+import com.example.tmd.task_mvp.databinding.ActivityMainBinding;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
 
     private MainContract.Presenter mPresenter;
-    private RecyclerView mRecyclerView;
-    private TaskAdapter mTaskAdapter;
-    private List<Task> mListTasks;
+    private TaskAdapter mAdapter = new TaskAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initView();
         mPresenter = new TaskPresenter(this,
                 new TaskRepository(new TaskLocalDataSource(this), new TaskRemoteDataSource(this)));
+        ActivityMainBinding mainBinding =
+                DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mainBinding.setActivity(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mPresenter.start();
-    }
-
-    private void initView() {
-        mListTasks = new ArrayList<>();
-        mTaskAdapter = new TaskAdapter(this, mListTasks);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mRecyclerView.setAdapter(mTaskAdapter);
     }
 
     @Override
@@ -116,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void onChangeCheckBox(Task task) {
+        task.setFinished(!task.isFinished());
         mPresenter.editTask(task);
     }
 
@@ -138,8 +128,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void onAddTaskSuccess(Task task) {
-        mListTasks.add(task);
-        mTaskAdapter.notifyItemInserted(mListTasks.size());
+        mAdapter.updateData(task);
     }
 
     @Override
@@ -149,22 +138,20 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void onGetAllTaskSuccess(List<Task> listTasks) {
-        mListTasks.clear();
-        mListTasks.addAll(listTasks);
-        mTaskAdapter.notifyItemInserted(mListTasks.size());
+        mAdapter.updateData(listTasks);
     }
 
     @Override
     public void onEditTaskSuccess(Task task) {
-        int index = mListTasks.indexOf(task);
-        mListTasks.set(index, task);
-        mTaskAdapter.notifyItemChanged(index);
+        mAdapter.updateData(task);
     }
 
     @Override
     public void onDeleteTaskSuccess(Task task) {
-        int index = mListTasks.indexOf(task);
-        mListTasks.remove(index);
-        mTaskAdapter.notifyItemRemoved(index);
+        mAdapter.deleteTask(task);
+    }
+
+    public TaskAdapter getAdapter() {
+        return mAdapter;
     }
 }
