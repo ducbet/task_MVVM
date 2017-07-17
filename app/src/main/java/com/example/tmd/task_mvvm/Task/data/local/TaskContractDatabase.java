@@ -1,4 +1,4 @@
-package com.example.tmd.task_mvp.Task.data.local;
+package com.example.tmd.task_mvvm.Task.data.local;
 
 import android.provider.BaseColumns;
 

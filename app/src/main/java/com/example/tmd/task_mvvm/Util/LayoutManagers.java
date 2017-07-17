@@ -1,4 +1,4 @@
-package com.example.tmd.task_mvp.util;
+package com.example.tmd.task_mvvm.Util;
 
 import android.support.annotation.IntDef;
 import android.support.v7.widget.GridLayoutManager;

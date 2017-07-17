@@ -1,11 +1,11 @@
-package com.example.tmd.task_mvp.util;
+package com.example.tmd.task_mvvm.Util;
 
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import com.example.tmd.task_mvp.ListTaskActivity.TaskAdapter;
-import com.example.tmd.task_mvp.Task.Model.Task;
+import com.example.tmd.task_mvvm.ListTaskActivity.TaskAdapter;
+import com.example.tmd.task_mvvm.ViewModel.ObservableTask;
 
 /**
  * Created by tmd on 13/07/2017.
@@ -25,7 +25,7 @@ public class BindingTaskAdapter {
     }
 
     @BindingAdapter("listTasks")
-    public static void setListTasks(RecyclerView recyclerView, ObservableList<Task> mList) {
+    public static void setListTasks(RecyclerView recyclerView, ObservableList<ObservableTask> mList) {
         TaskAdapter adapter =
                 (TaskAdapter) recyclerView.getAdapter();
         if (adapter == null) {

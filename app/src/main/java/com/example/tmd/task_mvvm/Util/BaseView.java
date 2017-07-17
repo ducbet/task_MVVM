@@ -1,6 +1,6 @@
-package com.example.tmd.task_mvp.util;
+package com.example.tmd.task_mvvm.Util;
 
-import com.example.tmd.task_mvp.ListTaskActivity.TaskPresenter;
+import com.example.tmd.task_mvvm.ListTaskActivity.TaskPresenter;
 
 /**
  * Created by tmd on 07/07/2017.

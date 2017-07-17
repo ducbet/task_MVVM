@@ -1,4 +1,4 @@
-package com.example.tmd.task_mvp;
+package com.example.tmd.task_mvvm;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.tmd.task_mvp", appContext.getPackageName());
+        assertEquals("com.example.tmd.task_mvvm", appContext.getPackageName());
     }
 }
