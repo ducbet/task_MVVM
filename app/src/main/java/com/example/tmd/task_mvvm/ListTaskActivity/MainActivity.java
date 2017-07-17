@@ -1,4 +1,4 @@
-package com.example.tmd.task_mvp.ListTaskActivity;
+package com.example.tmd.task_mvvm.ListTaskActivity;
 
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
@@ -10,12 +10,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.example.tmd.task_mvp.R;
-import com.example.tmd.task_mvp.Task.Model.Task;
-import com.example.tmd.task_mvp.Task.data.TaskRepository;
-import com.example.tmd.task_mvp.Task.data.local.TaskLocalDataSource;
-import com.example.tmd.task_mvp.Task.data.remote.TaskRemoteDataSource;
-import com.example.tmd.task_mvp.databinding.ActivityMainBinding;
+import com.example.tmd.task_mvvm.R;
+import com.example.tmd.task_mvvm.ViewModel.ObservableTask;
+import com.example.tmd.task_mvvm.Task.data.TaskRepository;
+import com.example.tmd.task_mvvm.Task.data.local.TaskLocalDataSource;
+import com.example.tmd.task_mvvm.Task.data.remote.TaskRemoteDataSource;
+import com.example.tmd.task_mvvm.databinding.ActivityMainBinding;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
@@ -26,11 +26,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new TaskPresenter(this,
-                new TaskRepository(new TaskLocalDataSource(this), new TaskRemoteDataSource(this)));
         ActivityMainBinding mainBinding =
                 DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainBinding.setActivity(this);
+        mPresenter = new TaskPresenter(this,
+                new TaskRepository(new TaskLocalDataSource(this), new TaskRemoteDataSource(this)));
     }
 
     @Override
@@ -70,8 +70,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .setPositiveButton("DONE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Task task = new Task(editText.getText().toString());
-                        mPresenter.addTask(task);
+                        ObservableTask observableTask =
+                                new ObservableTask(editText.getText().toString());
+                        mPresenter.addTask(observableTask);
                     }
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -83,16 +84,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void onShowEditTaskInputDialog(final Task task) {
+    public void onShowEditTaskInputDialog(final ObservableTask observableTask) {
         final EditText editText = new EditText(this);
         editText.setHint("Title");
-        new AlertDialog.Builder(this).setTitle("New task")
+        new AlertDialog.Builder(this).setTitle("New observableTask")
                 .setView(editText)
                 .setPositiveButton("DONE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        task.setTitle(editText.getText().toString());
-                        mPresenter.editTask(task);
+                        observableTask.setTitle(editText.getText().toString());
+                        mPresenter.editTask(observableTask);
                     }
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -104,18 +105,18 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void onChangeCheckBox(Task task) {
-        task.setFinished(!task.isFinished());
-        mPresenter.editTask(task);
+    public void onChangeCheckBox(ObservableTask observableTask) {
+        observableTask.setFinished(!observableTask.isFinished().get());
+        mPresenter.editTask(observableTask);
     }
 
     @Override
-    public void onShowDeleteTaskConfirmDialog(final Task task) {
-        new AlertDialog.Builder(this).setTitle("New task")
+    public void onShowDeleteTaskConfirmDialog(final ObservableTask observableTask) {
+        new AlertDialog.Builder(this).setTitle("New observableTask")
                 .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mPresenter.deleteTask(task);
+                        mPresenter.deleteTask(observableTask);
                     }
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -127,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void onAddTaskSuccess(Task task) {
-        mAdapter.updateData(task);
+    public void onAddTaskSuccess(ObservableTask observableTask) {
+        mAdapter.updateData(observableTask);
     }
 
     @Override
@@ -137,18 +138,18 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void onGetAllTaskSuccess(List<Task> listTasks) {
-        mAdapter.updateData(listTasks);
+    public void onGetAllTaskSuccess(List<ObservableTask> listObservableTasks) {
+        mAdapter.updateData(listObservableTasks);
     }
 
     @Override
-    public void onEditTaskSuccess(Task task) {
-        mAdapter.updateData(task);
+    public void onEditTaskSuccess(ObservableTask observableTask) {
+        mAdapter.updateData(observableTask);
     }
 
     @Override
-    public void onDeleteTaskSuccess(Task task) {
-        mAdapter.deleteTask(task);
+    public void onDeleteTaskSuccess(ObservableTask observableTask) {
+        mAdapter.deleteTask(observableTask);
     }
 
     public TaskAdapter getAdapter() {

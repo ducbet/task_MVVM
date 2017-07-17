@@ -7,9 +7,9 @@
     <data>
         <variable
             name="activity"
-            type="com.example.tmd.task_mvp.ListTaskActivity.MainActivity"
+            type="com.example.tmd.task_mvvm.ListTaskActivity.MainActivity"
             />
-        <import type="com.example.tmd.task_mvp.util.LayoutManagers"/>
+        <import type="com.example.tmd.task_mvvm.Util.LayoutManagers"/>
     </data>
 
     <LinearLayout

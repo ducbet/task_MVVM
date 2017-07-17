@@ -1,8 +1,8 @@
-package com.example.tmd.task_mvp.ListTaskActivity;
+package com.example.tmd.task_mvvm.ListTaskActivity;
 
-import com.example.tmd.task_mvp.Task.Model.Task;
-import com.example.tmd.task_mvp.Task.data.TaskDataSource;
-import com.example.tmd.task_mvp.Task.data.TaskRepository;
+import com.example.tmd.task_mvvm.ViewModel.ObservableTask;
+import com.example.tmd.task_mvvm.Task.data.TaskDataSource;
+import com.example.tmd.task_mvvm.Task.data.TaskRepository;
 import java.util.List;
 
 /**
@@ -10,8 +10,8 @@ import java.util.List;
  */
 public class TaskPresenter implements MainContract.Presenter {
 
-    private MainContract.View mView;
-    private TaskDataSource mTaskDataSource;
+    private MainContract.View mView;// view
+    private TaskDataSource mTaskDataSource;// model
 
     public TaskPresenter(MainContract.View view, TaskRepository taskRepository) {
         mView = view;
@@ -22,9 +22,9 @@ public class TaskPresenter implements MainContract.Presenter {
     @Override
     public void start() {
         // get task from database
-        mTaskDataSource.getAllTask(new TaskDataSource.Callbacks<Task>() {
+        mTaskDataSource.getAllTask(new TaskDataSource.Callbacks<ObservableTask>() {
             @Override
-            public void onSuccessfull(List<Task> data) {
+            public void onSuccessfull(List<ObservableTask> data) {
                 mView.onGetAllTaskSuccess(data);
             }
 
@@ -36,11 +36,11 @@ public class TaskPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void addTask(final Task task) {
-        mTaskDataSource.addTask(task, new TaskDataSource.Callback<Boolean>() {
+    public void addTask(final ObservableTask observableTask) {
+        mTaskDataSource.addTask(observableTask, new TaskDataSource.Callback<Boolean>() {
             @Override
             public void onSuccessfull(Boolean data) {
-                mView.onAddTaskSuccess(task);
+                mView.onAddTaskSuccess(observableTask);
             }
 
             @Override
@@ -51,11 +51,11 @@ public class TaskPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void editTask(final Task task) {
-        mTaskDataSource.editTask(task, new TaskDataSource.Callback<Boolean>() {
+    public void editTask(final ObservableTask observableTask) {
+        mTaskDataSource.editTask(observableTask, new TaskDataSource.Callback<Boolean>() {
             @Override
             public void onSuccessfull(Boolean data) {
-                mView.onEditTaskSuccess(task);
+                mView.onEditTaskSuccess(observableTask);
             }
 
             @Override
@@ -66,11 +66,11 @@ public class TaskPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void deleteTask(final Task task) {
-        mTaskDataSource.deleteTask(task, new TaskDataSource.Callback<Boolean>() {
+    public void deleteTask(final ObservableTask observableTask) {
+        mTaskDataSource.deleteTask(observableTask, new TaskDataSource.Callback<Boolean>() {
             @Override
             public void onSuccessfull(Boolean data) {
-                mView.onDeleteTaskSuccess(task);
+                mView.onDeleteTaskSuccess(observableTask);
             }
 
             @Override

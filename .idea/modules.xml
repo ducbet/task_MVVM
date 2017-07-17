@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/task_databinding_MVP.iml" filepath="$PROJECT_DIR$/task_databinding_MVP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/task_MVVM.iml" filepath="$PROJECT_DIR$/task_MVVM.iml" />
     </modules>
   </component>
 </project>

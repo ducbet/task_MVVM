@@ -1,12 +1,12 @@
-package com.example.tmd.task_mvp.util;
+package com.example.tmd.task_mvvm.Util;
 
 import android.databinding.BindingAdapter;
-import android.databinding.ObservableList;
+import android.databinding.BindingConversion;
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import com.example.tmd.task_mvp.ListTaskActivity.MainContract;
-import com.example.tmd.task_mvp.ListTaskActivity.TaskAdapter;
-import com.example.tmd.task_mvp.Task.Model.Task;
+import java.util.Observable;
 
 /**
  * Created by tmd on 13/07/2017.

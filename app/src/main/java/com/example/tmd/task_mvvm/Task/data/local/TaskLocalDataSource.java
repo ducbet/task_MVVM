@@ -1,9 +1,8 @@
-package com.example.tmd.task_mvp.Task.data.local;
+package com.example.tmd.task_mvvm.Task.data.local;
 
 import android.content.Context;
-import android.util.Log;
-import com.example.tmd.task_mvp.Task.Model.Task;
-import com.example.tmd.task_mvp.Task.data.TaskDataSource;
+import com.example.tmd.task_mvvm.ViewModel.ObservableTask;
+import com.example.tmd.task_mvvm.Task.data.TaskDataSource;
 
 /**
  * Created by tmd on 07/07/2017.
@@ -20,13 +19,13 @@ public class TaskLocalDataSource implements TaskDataSource {
     }
 
     @Override
-    public void getAllTask(Callbacks<Task> callback) {
+    public void getAllTask(Callbacks<ObservableTask> callback) {
         callback.onSuccessfull(mCRUDHelper.getAllTask());
     }
 
     @Override
-    public void addTask(Task task, Callback<Boolean> callback) {
-        if (mCRUDHelper.insertTask(task)) {
+    public void addTask(ObservableTask observableTask, TaskDataSource.Callback<Boolean> callback) {
+        if (mCRUDHelper.insertTask(observableTask)) {
             callback.onSuccessfull(Boolean.TRUE);
         } else {
             callback.onFailed("ADD TASK FAILED");
@@ -34,8 +33,8 @@ public class TaskLocalDataSource implements TaskDataSource {
     }
 
     @Override
-    public void editTask(Task task, Callback<Boolean> callback) {
-        if (mCRUDHelper.editTask(task)) {
+    public void editTask(ObservableTask observableTask, Callback<Boolean> callback) {
+        if (mCRUDHelper.editTask(observableTask)) {
             callback.onSuccessfull(Boolean.TRUE);
         } else {
             callback.onFailed("EDIT TASK FAILED");
@@ -43,8 +42,8 @@ public class TaskLocalDataSource implements TaskDataSource {
     }
 
     @Override
-    public void deleteTask(Task task, Callback<Boolean> callback) {
-        if (mCRUDHelper.deleteTask(task)) {
+    public void deleteTask(ObservableTask observableTask, Callback<Boolean> callback) {
+        if (mCRUDHelper.deleteTask(observableTask)) {
             callback.onSuccessfull(Boolean.TRUE);
         } else {
             callback.onFailed("EDIT TASK FAILED");
