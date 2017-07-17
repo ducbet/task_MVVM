@@ -1,6 +1,6 @@
 package com.example.tmd.task_mvvm.Task.data;
 
-import com.example.tmd.task_mvvm.ViewModel.ObservableTask;
+import com.example.tmd.task_mvvm.ViewModel.Task;
 import java.util.List;
 
 /**
@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface TaskDataSource {
 
-    void getAllTask(Callbacks<ObservableTask> callback);
+    void getAllTask(Callbacks<Task> callback);
 
-    void addTask(ObservableTask observableTask, Callback<Boolean> callback);
+    void addTask(Task task, Callback<Boolean> callback);
 
-    void editTask(ObservableTask observableTask, Callback<Boolean> callback);
+    void editTask(Task task, Callback<Boolean> callback);
 
-    void deleteTask(ObservableTask observableTask, Callback<Boolean> callback);
+    void deleteTask(Task task, Callback<Boolean> callback);
 
     interface Callback<T> {
         void onSuccessfull(T data);
